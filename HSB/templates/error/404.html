@@ -1,0 +1,12 @@
+{% extends "layout.html" %}
+{% block title %} file not found {% endblock %}
+{% block content %} 
+
+{% filter markdown %}
+
+### Page not found
+
+##### <a href="{{url_for('home.index')}}">back to home</a>
+
+{% endfilter %}
+{% endblock %}

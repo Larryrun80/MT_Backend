@@ -1,0 +1,19 @@
+{% extends "layout.html" %}
+{% block title %} index {% endblock %}
+{% block content %} 
+
+{% filter markdown %}
+
+## Welcome to MyToken Backend
+---
+
+#### What's New
+- 货币信息和ICO信息， 管理页面上线
+
+---
+
+#### End Points
+- [数字货币管理 & ico信息]({{ url_for('management.mgt_currency_detail', currency_id=1) }})
+
+{% endfilter %}
+{% endblock %}

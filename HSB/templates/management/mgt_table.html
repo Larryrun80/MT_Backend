@@ -1,0 +1,37 @@
+{% extends "layout.html" %}
+{% block title %} ico management {% endblock %}
+{% block content %} 
+
+{% if data and data['columns'] and data['rows'] %}
+
+    <table class="table table-hover" id="mgt_table">
+        <thead>
+            <tr>
+                {% for col in data['columns'] %}
+                    <th> {{ col }} </th>
+                {% endfor %}
+                {% if (enableEdit == undefined) or (enableEdit == True) %}
+                    <th>operation</th>
+                {% endif %}
+            </tr>
+        </thead>
+        <tbody>
+            {% for row in data['rows'] %}
+                <tr>
+                    {% for col in row[1:] %}
+                        <td>
+                            {{ col | safe }} 
+                        </td>
+                    {% endfor %}
+                    {% if (enableEdit == undefined) or (enableEdit == True) %}
+                        <td> <a href="{{ url_for(request.endpoint) }}/{{row[0]}}">编辑</a> </td>
+                    {% endif %}
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+
+{% endif %}
+
+{% endblock %}
