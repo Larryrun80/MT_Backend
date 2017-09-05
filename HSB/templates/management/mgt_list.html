@@ -2,8 +2,19 @@
 {% block title %} ico management {% endblock %}
 {% block content %} 
 
-{% if data and data['columns'] and data['rows'] %}
+  {% from 'macro/forms.html' import render_field %}
+  <form method="POST" action="{{ url_for('management.mgt_currency_list') }}">
+    <dl>
+        {% for item in form %}
+          {{ render_field(item, class='form-control') }}
+        {% endfor %}
+        {{ form.csrf_token }}
+    </dl>
+    <p><button type="submit">submit</button>
+  </form>
 
+{% if data and data['columns'] and data['rows'] %}
+    
     <table class="table table-hover" id="mgt_table">
         <thead>
             <tr>

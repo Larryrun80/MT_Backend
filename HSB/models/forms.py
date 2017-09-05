@@ -29,3 +29,7 @@ class CurrencyForm(FlaskForm):
     ico_date = StringField('ICO募集时间')
     ico_amount = StringField('ICO总量')
     ico_distribution = TextAreaField('分发方案')
+
+
+class SearchForm(FlaskForm):
+    search = StringField('搜索', [validators.DataRequired()])

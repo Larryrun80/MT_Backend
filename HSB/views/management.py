@@ -15,14 +15,23 @@ def index():
     return render_template('home/index.html')
 
 
-@mgt.route('/currency')
+@mgt.route('/currency', methods=["GET", "POST"])
 @login_required
 def mgt_currency_list():
     from ..models.currency import Currency
+    from ..models.forms import SearchForm
+
+    form = SearchForm()
+    keyword = ''
+
+    if form.validate_on_submit():
+        keyword = form.search.data
 
     return_data = {}
-    (return_data['columns'], return_data['rows']) = Currency.get_list()
+    (return_data['columns'], return_data['rows']) = Currency.get_list(
+        keyword=keyword)
     return render_template('management/mgt_list.html',
+                           form=form,
                            data=return_data,
                            edit=True)
 

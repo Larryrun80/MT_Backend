@@ -19,6 +19,7 @@ class Currency(db.Model, ManagementView):
     mytoken_id = db.Column(db.String(20))
     website = db.Column(db.String(255))
     rank = db.Column(db.Integer)
+    search_field = db.Column(db.String(255))
     enabled = db.Column(db.Integer)
     created_at = db.Column(db.Integer)
     updated_at = db.Column(db.Integer)
@@ -43,7 +44,7 @@ class Currency(db.Model, ManagementView):
         return '{} ({})'.format(self.name, self.symbol)
 
     @classmethod
-    def get_list(cls):
+    def get_list(cls, **kwargs):
         list_columns = [
             {
               'name': 'Token ID',
@@ -104,7 +105,11 @@ class Currency(db.Model, ManagementView):
             },
         ]
 
-        currencies = cls.query.all()
+        currencies = []
+        if 'keyword' in kwargs.keys() and kwargs['keyword']:
+            currencies = cls.query.filter(
+                Currency.search_field.like('%{}%'.format(kwargs['keyword'])))
+
         rows_data = []
         for currency in currencies:
             row_data = []
