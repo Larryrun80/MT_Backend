@@ -15,6 +15,18 @@ def index():
     return render_template('home/index.html')
 
 
+@mgt.route('/currency')
+@login_required
+def mgt_currency_list():
+    from ..models.currency import Currency
+
+    return_data = {}
+    (return_data['columns'], return_data['rows']) = Currency.get_list()
+    return render_template('management/mgt_list.html',
+                           data=return_data,
+                           edit=True)
+
+
 @mgt.route('/currency/<currency_id>', methods=["GET", "POST"])
 @login_required
 def mgt_currency_detail(currency_id=0):
@@ -31,8 +43,7 @@ def mgt_currency_detail(currency_id=0):
         Currency.query.get(currency_id).update(form)
 
         flash('success')
-        return redirect(url_for('management.mgt_currency_detail',
-                        currency_id=currency_id))
+        return redirect(url_for('management.mgt_currency_list'))
     else:
         form = Currency.query.get(currency_id).bind_form()
 

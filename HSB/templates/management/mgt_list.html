@@ -8,22 +8,26 @@
         <thead>
             <tr>
                 {% for col in data['columns'] %}
-                    <th> {{ col }} </th>
+                    <th> {{ col['name'] }} </th>
                 {% endfor %}
-                {% if (enableEdit == undefined) or (enableEdit == True) %}
-                    <th>operation</th>
+                {% if edit %}
+                    <th>操作</th>
                 {% endif %}
             </tr>
         </thead>
         <tbody>
             {% for row in data['rows'] %}
                 <tr>
-                    {% for col in row[1:] %}
+                    {% for col in row %}
                         <td>
-                            {{ col | safe }} 
+                            {% if (data['columns'][loop.index0]['need_safe']) %}
+                                {{ col | safe }} 
+                            {% else %}
+                                {{ col }} 
+                            {% endif %}
                         </td>
                     {% endfor %}
-                    {% if (enableEdit == undefined) or (enableEdit == True) %}
+                    {% if edit %}
                         <td> <a href="{{ url_for(request.endpoint) }}/{{row[0]}}">编辑</a> </td>
                     {% endif %}
                 </tr>

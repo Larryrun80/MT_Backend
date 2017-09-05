@@ -1,7 +1,8 @@
+import arrow
 from sqlalchemy import orm
 
 from .. import db
-from .ico import Ico 
+from .ico import Ico
 from .managementview import ManagementView
 
 
@@ -41,6 +42,81 @@ class Currency(db.Model, ManagementView):
     def __repr__(self):
         return '{} ({})'.format(self.name, self.symbol)
 
+    @classmethod
+    def get_list(cls):
+        list_columns = [
+            {
+              'name': 'Token ID',
+              'attr': 'id',
+              'format': '{attr}',
+              'need_safe': False
+            },
+            {
+              'name': 'Token Name',
+              'attr': 'name',
+              'format': '{attr}',
+              'need_safe': False
+            },
+            {
+              'name': 'Symbol',
+              'attr': 'symbol',
+              'format': '{attr}',
+              'need_safe': False
+            },
+            {
+              'name': '别名',
+              'attr': 'alias',
+              'format': '{attr}',
+              'need_safe': False
+            },
+            {
+              'name': 'MyToken ID',
+              'attr': 'mytoken_id',
+              'format': '{attr}',
+              'need_safe': False
+            },
+            {
+              'name': '排名',
+              'attr': 'rank',
+              'format': '{attr}',
+              'need_safe': False
+            },
+            {
+              'name': 'ico信息',
+              'attr': 'ico',
+              'format': '{attr}',
+              'need_safe': False,
+              'type': 'bool'
+            },
+            {
+              'name': '在线',
+              'attr': 'enabled',
+              'format': '{attr}',
+              'need_safe': False,
+              'type': 'bool',
+            },
+            {
+              'name': '创建时间',
+              'attr': 'created_at',
+              'format': '{attr}',
+              'need_safe': False,
+              'type': 'datetime'
+            },
+        ]
+
+        currencies = cls.query.all()
+        rows_data = []
+        for currency in currencies:
+            row_data = []
+            for col in list_columns:
+                col_type = col.get('type', 'string')
+                row_data.append(col['format'].format(
+                    attr=currency.get_attr_value(col['attr'], col_type)))
+
+            rows_data.append(row_data)
+
+        return (list_columns, rows_data)
+
     def bind_form(self):
         from .forms import CurrencyForm
 
@@ -58,14 +134,21 @@ class Currency(db.Model, ManagementView):
         db.session.merge(self)
         db.session.commit()
 
-    def get_attr_value(self, attr):
+    def get_attr_value(self, attr, attr_type='string'):
         if attr not in self.attr_map.keys():
             if hasattr(self, attr):
-                return getattr(self, attr)
+                data = getattr(self, attr)
             else:
                 raise RuntimeError('illegal attribution: {}'.format(attr))
         else:
-            return self.attr_map[attr]
+            data = self.attr_map[attr]
+
+        if attr_type == 'string':
+            return data
+        if attr_type == 'bool':
+            return True if data else False
+        if attr_type == 'datetime':
+            return arrow.get(data).format('YYYY-MM-DD HH:MM:SS')
 
     def set_attr_value(self, attr, val):
         if attr not in self.attr_map.keys():

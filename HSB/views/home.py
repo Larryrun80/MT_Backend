@@ -41,6 +41,7 @@ def signin():
         if form.email.data == 'roy@mytoken.io' and\
               form.password.data == 'io.My_token':
             login_user(User())
-
-        return redirect(url_for('home.index'))
+            return redirect(url_for('home.index'))
+        else:
+            flash('登陆失败，请重试')
     return render_template('home/signin.html', form=form)
