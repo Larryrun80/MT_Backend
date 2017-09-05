@@ -107,8 +107,9 @@ class Currency(db.Model, ManagementView):
 
         currencies = []
         if 'keyword' in kwargs.keys() and kwargs['keyword']:
-            currencies = cls.query.filter(
-                Currency.search_field.like('%{}%'.format(kwargs['keyword'])))
+            currencies = cls.query.filter(Currency.enabled == 1,
+                                          Currency.search_field.like(
+                                            '%{}%'.format(kwargs['keyword'])))
 
         rows_data = []
         for currency in currencies:
