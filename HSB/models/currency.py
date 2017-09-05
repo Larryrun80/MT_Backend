@@ -35,7 +35,7 @@ class Currency(db.Model, ManagementView):
         self.attr_map = {
             'ico_cost': self.ico.ico_cost if self.ico else None,
             'description': self.ico.description if self.ico else None,
-            'ico_date': self.ico.ico_datetime if self.ico else None,
+            'ico_datetime': self.ico.ico_datetime if self.ico else None,
             'ico_amount': self.ico.ico_amount if self.ico else None,
             'ico_distribution': self.ico.ico_distribution if self.ico else None
         }

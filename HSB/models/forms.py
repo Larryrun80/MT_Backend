@@ -26,7 +26,7 @@ class CurrencyForm(FlaskForm):
     enabled = BooleanField('是否在线')
     ico_cost = StringField('ICO成本')
     description = TextAreaField('项目描述')
-    ico_date = StringField('ICO募集时间')
+    ico_datetime = StringField('ICO募集时间')
     ico_amount = StringField('ICO总量')
     ico_distribution = TextAreaField('分发方案')
 
